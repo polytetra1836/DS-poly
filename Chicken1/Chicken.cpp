@@ -55,6 +55,7 @@ class Chicken
             name = new char[len];
             for (int i = 0; i < len; i++)
                 name[i] = other.name[i];
+        name=new char(*other.name);
         return *this;
         }
      
