@@ -38,7 +38,7 @@ public:
     {
         age = _age;
     }
-    void setName(const char *_name)
+    void setName(char *_name)
     {
         if (name != nullptr)
         {
@@ -51,7 +51,7 @@ public:
             name[i] = _name[i];
     }
 
-    const char *getName() const
+    const std::string getName() const
     {
         return name;
     }
@@ -65,14 +65,21 @@ public:
     {
         if (this == &other)
             return *this;
-        delete[] name;
         age = other.age;
         if (other.name == nullptr)
         {
             name = nullptr;
             return *this;
         }
-        setName(other.name);
+        if (name != nullptr)
+        {
+            delete[] name;
+            name = nullptr;
+        }
+        int len = strlen(other.name) + 1;
+        name = new char[len];
+        for (int i = 0; i < len; i++)
+            name[i] = other.name[i];
 
         return *this;
     }
