@@ -13,6 +13,8 @@ int main()
     SingleLinkedList<double> c1;
     SingleLinkedList<double> c2{1.5, 2.0, 9.0, 4.7};
     SingleLinkedList<double> c3;
+    SingleLinkedList<double> c11;
+    SingleLinkedList<double> c22;
     c3 = c2;
     c1.insert(3.0);
     c2.insert(8.8);
@@ -24,9 +26,12 @@ int main()
     e.remove();
     c1.remove();
     bool f = c2.find(9.0);
+    c11 = c1;
+    c22 = c2;
     c2.remove();
     e.printList();
-    c1.printList();
     c2.printList();
+    c22.removeCurrent();
+    c22.printList();
     return 0;
 }

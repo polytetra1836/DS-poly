@@ -215,16 +215,21 @@ void SingleLinkedList<T>::remove()
     {
         return;
     }
+    if (size == 1)
+    {
+        emptyList();
+        return;
+    }
+
     if (currentPos->next == nullptr)
     {
-        if (size == 1)
-        {
-            emptyList();
-            return;
-        }
         return;
     }
     Node *t = currentPos->next;
+    if (t == nullptr)
+    {
+        return;
+    }
     currentPos->next = t->next;
     delete t;
     --size;
