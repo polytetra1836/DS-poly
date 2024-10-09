@@ -268,11 +268,13 @@ void SingleLinkedList<T>::removehead()
 template <typename T>
 void SingleLinkedList<T>::removeCurrent()
 {
-    if (currentPos == head)
+    if (currentPos == head && head!=nullptr)
     {
         removehead();
         return;
     }
     currentPos = getpre();
     remove();
+    if(currentPos!=nullptr&&currentPos->next!=nullptr)
+    currentPos=currentPos->next;
 }
