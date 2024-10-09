@@ -47,6 +47,8 @@ public:
     void remove();
     /// 获取链表中指向currentPos的节点
     Node *getpre();
+    /// 删除 currentPos为head时的函数
+    void removehead();
     /// 删除 currentPos 所在的元素
     void removeCurrent();
 };
@@ -211,12 +213,15 @@ void SingleLinkedList<T>::remove()
 {
     if (currentPos == nullptr)
     {
-        std::cerr << "Empty current position!Can't remove." << std::endl;
         return;
     }
     if (currentPos->next == nullptr)
     {
-        std::cerr << "No element to remove after current position." << std::endl;
+        if (size == 1)
+        {
+            emptyList();
+            return;
+        }
         return;
     }
     Node *t = currentPos->next;
@@ -241,17 +246,28 @@ typename SingleLinkedList<T>::Node *SingleLinkedList<T>::getpre()
     return t;
 }
 template <typename T>
-void SingleLinkedList<T>::removeCurrent()
+void SingleLinkedList<T>::removehead()
 {
-    if (currentPos == head) // 如果当前节点为头结点
+    if (size == 1)
     {
-        Node *t = currentPos;
-        head = head->next;
-        currentPos = head;
-        delete t;
-        --size;
+        emptyList();
         return;
     }
-    currentPos = getpre(); // 链表是空时getpre返回空指针，remove仍然会反馈错误；链表不为空就正常运行remove
+    Node *t = currentPos;
+    head = head->next;
+    currentPos = head;
+    delete t;
+    --size;
+    return;
+}
+template <typename T>
+void SingleLinkedList<T>::removeCurrent()
+{
+    if (currentPos == head)
+    {
+        removehead();
+        return;
+    }
+    currentPos = getpre();
     remove();
 }
