@@ -48,6 +48,7 @@ void testList()
     std::cout << std::endl;
     // 测试clear
     lst.clear();
+    lst.clear();
     std::cout << "List size after clearing: " << lst.size() << std::endl;
     std::cout << "We refresh the list to its original state" << std::endl;
     std::cout << "After popping back an element:" << std::endl;
@@ -74,7 +75,7 @@ void testList()
 
     for (auto it = --lst.end(); it != lst.begin(); --it)
     {
-        std::cout << *it << " "; 
+        std::cout << *it << " ";
     }
     std::cout << *lst.begin();
     std::cout << std::endl; //
