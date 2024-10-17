@@ -1,13 +1,13 @@
-# Makefile for linkedlist1 project
+# Makefile for List project
 
 # Compiler
 CXX = g++
 
 # Target executable
-TARGET = main
+TARGET = List
 
 # Source files
-SRCS = main.cpp
+SRCS = List.cpp
 
 # Compiler flags
 CXXFLAGS = -std=c++11 -Wall
@@ -21,3 +21,5 @@ $(TARGET): $(SRCS)
 # Clean the build files
 clean:
 	rm -f $(TARGET)
+report:
+	xelatex report.tex

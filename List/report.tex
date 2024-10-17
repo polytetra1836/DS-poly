@@ -1,0 +1,107 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{geometry,CJKutf8}
+\geometry{margin=1.5cm, vmargin={0pt,1cm}}
+\setlength{\topmargin}{-1cm}
+\setlength{\paperheight}{29.7cm}
+\setlength{\textheight}{25.3cm}
+
+% useful packages.
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{layout}
+\usepackage{listings}
+\usepackage{float, caption}
+
+\lstset{
+    basicstyle=\ttfamily, basewidth=0.5em
+}
+
+% some common command
+\newcommand{\dif}{\mathrm{d}}
+\newcommand{\avg}[1]{\left\langle #1 \right\rangle}
+\newcommand{\difFrac}[2]{\frac{\dif #1}{\dif #2}}
+\newcommand{\pdfFrac}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\OFL}{\mathrm{OFL}}
+\newcommand{\UFL}{\mathrm{UFL}}
+\newcommand{\fl}{\mathrm{fl}}
+\newcommand{\op}{\odot}
+\newcommand{\Eabs}{E_{\mathrm{abs}}}
+\newcommand{\Erel}{E_{\mathrm{rel}}}
+
+\begin{document}
+
+\pagestyle{fancy}
+\fancyhead{}
+\lhead{陈翔, 3230103619}
+\chead{数据结构与算法第四次作业}
+\rhead{Oct.17th, 2024}
+
+\section{测试程序的设计思路}
+
+我首先创建了一个链表,向其中插入了元素,依次为从0到9的整数,测试了empty,push\_back,size等函数以及访问头尾元素的功能。\\
+随后我用迭代器输出了一次数据，测试了迭代器功能，并向链表头、尾分别删除元素，再次输出链表数据。\\
+完成上述操作，我清空了链表并检查元素个数，然后将链表恢复至第一次插入元素的状态。\\
+最后，我分别检验了前置与后置自增、自减运算符的功能,以及赋值函数与赋值运算符，移动赋值函数与移动赋值运算符的功能。\\
+每次操作，我都输出一次链表元素，对于创建新对象的操作，我检验对象地址和原地址以确定赋值不是浅赋值。\\
+\section{测试的结果}
+以下是程序输出内容：\\
+
+List is empty: true\\
+Pushing back elements 0 to 9:\\
+0 1 2 3 4 5 6 7 8 9 \\
+List is empty: false\\
+List size after adding 10 elements: 10\\
+First element: 0\\
+Last element: 9\\
+List elements: 0 1 2 3 4 5 6 7 8 9 \\
+List size after popping front: 9\\
+List size after popping back: 8\\
+First element after popping front:1\\
+Last element after popping back: 8\\
+List size after inserting 1 and 5 at the front: 10\\
+List elements after more insertions: 1 5 1 2 3 4 5 6 7 8 \\
+List size after clearing: 0\\
+We refresh the list to its original state\\
+Using iterator and ++it:\\
+0 1 2 3 4 5 6 7 8 \\
+Using iterator and it++:\\
+0 1 2 3 4 5 6 7 8 \\
+Using iterator and --it(reverse):\\
+8 7 6 5 4 3 2 1 0\\
+Using iterator and it--(reverse) :\\
+8 7 6 5 4 3 2 1 0\\
+Copying list to a new list:\\
+0 1 2 3 4 5 6 7 8 \\
+The address of new list is different.\\
+Assigning list to a new list:\\
+0 1 2 3 4 5 6 7 8 \\
+The address of new list is different.\\
+Moving list to a new list:\\
+0 1 2 3 4 5 6 7 8 \\
+The address of new list is different.\\
+Move-assigning list to a new list:\\
+0 1 2 3 4 5 6 7 8 \\
+The address of new list is different.\\
+测试结果一切正常。
+
+我用 valgrind 进行测试，发现没有发生内存泄露。
+
+\section{bug报告}
+
+我发现了一个List.h文件中的函数 bug:当erase函数接收的对象为空链表,编译完成后,可执行文件运行会在该栈生成后运行中断。\\
+据我分析，它出现的原因是：
+该函数没有对空指针进行检查,导致对空指针进行解引用而报错。
+对此，只需要在函数内部进行修改，对传入空指针的情况进行单独判断和返回。\\
+经测试,修改后的函数可以正常接收空链表,以此顺便解决clear等所有调用该函数的同类问题。
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
