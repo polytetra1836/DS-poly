@@ -297,15 +297,6 @@ public:
         delete head;
         delete tail;
     }
-
-    /// ？？？
-    // List &operator=(const List &rhs)
-    // {
-    //     List copy = rhs;
-    //     std::swap( *this, copy );
-    //     return *this;
-    // }
-
     /**
      * @brief 赋值运算符. 用于将一个 List 的数据赋值给另一个 List.
      * 这里采用了 copy-and-swap 的技术. 通过传值的方式来调用拷贝构造函数，
@@ -549,7 +540,8 @@ public:
     iterator erase(iterator itr)
     {
         Node *p = itr.current;
-        if(p==nullptr) return p;
+        if (p == nullptr)
+            return p;
         iterator retVal{p->next};
         p->prev->next = p->next;
         p->next->prev = p->prev;

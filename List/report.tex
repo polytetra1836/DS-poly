@@ -40,57 +40,65 @@
 \fancyhead{}
 \lhead{陈翔, 3230103619}
 \chead{数据结构与算法第四次作业}
-\rhead{Oct.17th, 2024}
+\rhead{Oct.20th, 2024}
 
 \section{测试程序的设计思路}
 
-我首先创建了一个链表,向其中插入了元素,依次为从0到9的整数,测试了empty,push\_back,size等函数以及访问头尾元素的功能。\par
-随后我用迭代器输出了一次数据，测试了迭代器功能，并向链表头、尾分别删除元素，再次输出链表数据。\par
-完成上述操作，我清空了链表并检查元素个数，然后将链表恢复至第一次插入元素的状态。\par
-最后，我分别检验了前置与后置自增、自减运算符的功能,以及赋值函数与赋值运算符，移动赋值函数与移动赋值运算符的功能。\par
+在主程序中，为方便起见，我写了printList函数以输出链表。\par
+我首先分别创建了一个初始化静态链表和一个动态链表,向动态链表插入了元素,依次为从0到9的整数,对于
+两个链表分别测试了静态、动态版本的访问元素、长度、是否为空的功能。\par
+对于动态链表，我测试了从头尾和指定位置版本的插入、删除元素功能，通过输出链表数据检测。\par
+完成上述操作，我清空了2次链表并检查长度，然后立刻将动态链表恢复。\par
+最后，我分别对静态和动态链表检验了前置与后置自增、自减运算符的功能。\par
+借用动态链表,我测试了赋值函数与赋值运算符，移动赋值函数与移动赋值运算符的功能。\par
 每次操作，我都输出一次链表元素，对于创建新对象的操作，我检验对象地址和原地址以确定赋值不是浅赋值。\par
 \section{测试的结果}
 以下是程序输出内容：\\
-
-List is empty: true\\
+Using the initializer List\\
+0 1 2 3 4 5 6 7 8 9 \\
+List is empty: false\\
 Pushing back elements 0 to 9:\\
 0 1 2 3 4 5 6 7 8 9 \\
 List is empty: false\\
 List size after adding 10 elements: 10\\
 First element: 0\\
 Last element: 9\\
-List elements: 0 1 2 3 4 5 6 7 8 9 \\
+First element: 0\\
+Last element: 9\\
 List size after popping front: 9\\
 List size after popping back: 8\\
 First element after popping front:1\\
 Last element after popping back: 8\\
 List size after inserting 1 and 5 at the front: 10\\
-List elements after more insertions: 1 5 1 2 3 4 5 6 7 8 \\
+List elements after more insertions: 1 1 2 3 4 5 6 7 8 5 \\
+List elements after directional insertions: 1 66 1 2 3 4 5 6 7 8 5 \\
 List size after clearing: 0\\
 We refresh the list to its original state\\
 Using iterator and ++it:\\
-0 1 2 3 4 5 6 7 8 \\
+0 1 2 3 4 5 6 7 8 9\\
+0 1 2 3 4 5 6 7 8 9 \\
 Using iterator and it++:\\
-0 1 2 3 4 5 6 7 8 \\
+0 1 2 3 4 5 6 7 8 9 \\
+0 1 2 3 4 5 6 7 8 9 \\
 Using iterator and --it(reverse):\\
-8 7 6 5 4 3 2 1 0\\
+9 8 7 6 5 4 3 2 1 0\\
+9 8 7 6 5 4 3 2 1 0\\
 Using iterator and it--(reverse) :\\
-8 7 6 5 4 3 2 1 0\\
+9 8 7 6 5 4 3 2 1 0\\
+9 8 7 6 5 4 3 2 1 0\\
 Copying list to a new list:\\
-0 1 2 3 4 5 6 7 8 \\
+0 1 2 3 4 5 6 7 8 9 \\
 The address of new list is different.\\
 Assigning list to a new list:\\
-0 1 2 3 4 5 6 7 8 \\
+0 1 2 3 4 5 6 7 8 9 \\
 The address of new list is different.\\
 Moving list to a new list:\\
-0 1 2 3 4 5 6 7 8 \\
+0 1 2 3 4 5 6 7 8 9 \\
 The address of new list is different.\\
 Move-assigning list to a new list:\\
-0 1 2 3 4 5 6 7 8 \\
+0 1 2 3 4 5 6 7 8 9 \\
 The address of new list is different.\\
-测试结果一切正常。
-
-我用 valgrind 进行测试，发现没有发生内存泄露。
+我用 valgrind 进行测试，发现没有发生内存泄露。\\
 
 \section{bug报告}
 
@@ -98,7 +106,7 @@ The address of new list is different.\\
 据我分析，它出现的原因是：
 该函数没有对空指针进行检查,导致对空指针进行解引用而报错。在实际过程中，这一操作并不意外，我们有可能清空一个已经被清空的链表，
 因此调用erase的函数都可能会出现同类bug。\par
-对此，只需要在函数内部进行修改，对传入空指针的情况进行单独判断和返回。\par
+对此，只需要在erase函数内部进行修改，对传入空指针的情况进行单独判断和返回。\par
 我连续使用了2次clear函数,经测试,修改后的函数可以正常接收空链表,以此顺便解决clear等所有调用该函数的同类问题。\par
 \end{document}
 
