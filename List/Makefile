@@ -10,7 +10,7 @@ TARGET = List
 SRCS = List.cpp
 
 # Compiler flags
-CXXFLAGS = -std=c++11 -Wall
+CXXFLAGS = -std=c++20 -Wall
 
 # Build the executable
 all: $(TARGET)

@@ -11,7 +11,7 @@ void printList(const List<int> &lst)
 void testList()
 {
     // 测试初始化列表构造函数
-    List lst0 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    List<int> lst0 = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     std::cout << "Using the initializer List" << std::endl;
     printList(lst0);
     //  测试是否为空
@@ -42,9 +42,12 @@ void testList()
     std::cout << "First element after popping front:" << lst.front() << std::endl;
     std::cout << "Last element after popping back: " << lst.back() << std::endl;
     // 测试插入元素
+    int a=6,b=2;
     lst.push_back(5);
     lst.push_front(1);
-    std::cout << "List size after inserting 1 and 5 at the front: " << lst.size() << std::endl;
+    lst.push_back(a);
+    lst.push_front(b);
+    std::cout << "List size after inserting 1 5 a(6) b(2) at the front: " << lst.size() << std::endl;
     std::cout << "List elements after more insertions: ";
     printList(lst);
     // 测试定向插入元素
@@ -68,12 +71,12 @@ void testList()
     printList(lst0);
     // 测试后置++操作
     std::cout << "Using iterator and it++:" << std::endl;
-    for (auto it = lst.begin(); it != lst.end(); it++)
+    for (List<int>::iterator it = lst.begin(); it != lst.end(); it++)
     {
         std::cout << *it << " "; // 使用后置++操作符
     }
     std::cout << std::endl;
-    for (auto it = lst0.begin(); it != lst0.end(); it++)
+    for (List<int>::const_iterator it = lst0.begin(); it != lst0.end(); it++)
     {
         std::cout << *it << " "; // 使用后置++操作符
     }
