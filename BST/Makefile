@@ -19,6 +19,8 @@ $(TARGET): $(SRCS)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRCS)
 
 # Clean the build files
+run: $(TARGET)
+	./$(TARGET)
 clean:
 	rm -f $(TARGET)
 report:
