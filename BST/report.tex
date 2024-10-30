@@ -1,0 +1,97 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{geometry,CJKutf8}
+\geometry{margin=1.5cm, vmargin={0pt,1cm}}
+\setlength{\topmargin}{-1cm}
+\setlength{\paperheight}{29.7cm}
+\setlength{\textheight}{25.3cm}
+
+% useful packages.
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{layout}
+\usepackage{listings}
+\usepackage{float, caption}
+
+\lstset{
+    basicstyle=\ttfamily, basewidth=0.5em
+}
+
+% some common command
+\newcommand{\dif}{\mathrm{d}}
+\newcommand{\avg}[1]{\left\langle #1 \right\rangle}
+\newcommand{\difFrac}[2]{\frac{\dif #1}{\dif #2}}
+\newcommand{\pdfFrac}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\OFL}{\mathrm{OFL}}
+\newcommand{\UFL}{\mathrm{UFL}}
+\newcommand{\fl}{\mathrm{fl}}
+\newcommand{\op}{\odot}
+\newcommand{\Eabs}{E_{\mathrm{abs}}}
+\newcommand{\Erel}{E_{\mathrm{rel}}}
+
+\begin{document}
+
+\pagestyle{fancy}
+\fancyhead{}
+\lhead{陈翔, 3230103619}
+\chead{数据结构与算法第五次作业}
+\rhead{Oct.30th, 2024}
+
+\section{实现函数的设计思路}
+按照提示，我编写了 \textbf{\texttt{detachrightMin}} 函数。该函数的功能是从给定的 \texttt{t} 节点出发，找出以 \texttt{t} 为根的右子树中的最小节点，返回该节点，并从原子树中断开这个节点。
+
+该函数主要处理以下情况：
+1. 当给定节点的右子节点即为右子树的最小节点时，单独设计了断开和连接节点的操作。
+2. 通过左遍历找到最小节点。考虑到断开操作可能导致当前节点丢失，我采用了循环和\texttt{current}指针来保留当前节点的信息，实现了 \textbf{findMin} 的功能，并在前后节点之间重新建立连接。
+
+由于最小节点没有左节点，逻辑上仅需考虑上述一种常规情况和一种特殊情况。
+
+\section{测试函数的设计思路}
+根据代码逻辑，我保留了已有的测试功能，并单独针对 "给定节点的右子节点无左子节点" 的情况进行了测试。因此，在 \texttt{remove(10)} 之后，我又调用 \texttt{remove(15)} 并打印了树，所有测试结果均正常。
+\section{测试的结果}
+以下是程序的输出内容：
+\begin{verbatim}
+Initial Tree:
+3
+5
+7
+10
+12
+15
+18
+Minimum element: 3
+Maximum element: 18
+Contains 7? Yes
+Contains 20? No
+Tree after removing 7:
+3
+5
+10
+12
+15
+18
+Tree after removing 10:
+3
+5
+12
+15
+18
+Tree after removing 15:
+3
+5
+12
+18
+\end{verbatim}
+
+此外，我用 \texttt{valgrind} 进行了内存测试，命令如下：
+未检测到内存泄露。
+
+\section{Bug 报告}
+在 \texttt{remove} 函数中暂未发现明显问题。
+
+\end{document}

@@ -42,7 +42,7 @@ void testList()
     std::cout << "First element after popping front:" << lst.front() << std::endl;
     std::cout << "Last element after popping back: " << lst.back() << std::endl;
     // 测试插入元素
-    int a=6,b=2;
+    int a = 6, b = 2;
     lst.push_back(5);
     lst.push_front(1);
     lst.push_back(a);
