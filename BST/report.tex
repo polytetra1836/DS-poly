@@ -49,7 +49,7 @@
 1. 当给定节点的右子节点即为右子树的最小节点时，单独设计了断开和连接节点的操作。
 2. 通过左遍历找到最小节点。考虑到断开操作可能导致当前节点丢失，我采用了循环和\texttt{current}指针来保留当前节点的信息，实现了 \textbf{findMin} 的功能，并在前后节点之间重新建立连接。
 
-由于最小节点没有左节点，逻辑上仅需考虑上述一种常规情况和一种特殊情况。
+由于最小节点没有左节点，逻辑上仅需考虑上述2种情况。
 
 \section{测试函数的设计思路}
 根据代码逻辑，我保留了已有的测试功能，并单独针对 "给定节点的右子节点无左子节点" 的情况进行了测试。因此，在 \texttt{remove(10)} 之后，我又调用 \texttt{remove(15)} 并打印了树，所有测试结果均正常。
@@ -88,10 +88,10 @@ Tree after removing 15:
 18
 \end{verbatim}
 
-此外，我用 \texttt{valgrind} 进行了内存测试，命令如下：
-未检测到内存泄露。
+此外，我用 \texttt{valgrind} 进行了内存测试，未检测到内存泄露。
 
 \section{Bug 报告}
 在 \texttt{remove} 函数中暂未发现明显问题。
 
 \end{document}
+\\valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./main
