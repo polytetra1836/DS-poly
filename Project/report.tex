@@ -1,0 +1,88 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{geometry}
+\geometry{margin=1.5cm, vmargin={0pt,1cm}}
+\setlength{\topmargin}{-1cm}
+\setlength{\paperheight}{29.7cm}
+\setlength{\textheight}{25.3cm}
+
+% useful packages.
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{layout}
+\usepackage{listings}
+\usepackage{float, caption}
+
+\lstset{
+    basicstyle=\ttfamily, basewidth=0.5em
+}
+
+% some common command
+\newcommand{\dif}{\mathrm{d}}
+\newcommand{\avg}[1]{\left\langle #1 \right\rangle}
+\newcommand{\difFrac}[2]{\frac{\dif #1}{\dif #2}}
+\newcommand{\pdfFrac}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\OFL}{\mathrm{OFL}}
+\newcommand{\UFL}{\mathrm{UFL}}
+\newcommand{\fl}{\mathrm{fl}}
+\newcommand{\op}{\odot}
+\newcommand{\Eabs}{E_{\mathrm{abs}}}
+\newcommand{\Erel}{E_{\mathrm{rel}}}
+
+\begin{document}
+
+\pagestyle{fancy}
+\fancyhead{}
+\lhead{陈翔, 3230103619}
+\chead{数据结构与算法项目作业}
+\rhead{Nov.6th, 2024}
+
+\section{四则运算表达式求值程序的设计思路}
+按照要求，我在\textbf{\texttt{expression\_evaluator.h}}文件中编写4个函数：
+\texttt{getPrecedenc}
+\texttt{applyop}
+\texttt{infixToPostfix}
+\texttt{evaluatePostfix}
+他们的功能依次是：规定运算符优先级、实现计算、转化中缀表达式为后缀表达式、计算后缀表达式。\par
+按照上课的提示，我按照任课老师的思路对2个主要函数的功能进行实现，对表达式转化和计算时
+用堆结构处理了运算符优先级和输入优先级，包括括号等不同情形。\par
+转化时，将数字紧密排列，运算符和空格等在输入前加入空格，方便后续计算处理。\par
+计算时，将表达式字符串按流读入，借助转化时写的空格合理断句。\par
+为了支持科学计数法，我使用了std::stod()对整个转换后的表达式中数字进行了类型转化，这包括已经实现的
+字符转化功能和科学计数的转化\textbf{\texttt{double}}类型功能。
+\section{测试函数的设计思路}
+根据项目要求，我对以下情况或要求进行测试，给出了相应实例：
+1.支持多重括号和四则运算;
+2.支持有限位小数运算;
+3.括号不匹配;
+4.运算符连续使用;
+5.表达式以运算符开头或结尾;
+6.出现除数是 0 ;
+7.识别负数;
+8.支持科学计数法，包括正负幂、与其他运算符不会冲突 \par
+如果还有遗漏考虑到情况，可以持续输入表达式验证，直到输入exit退出。
+\section{测试的结果}
+以下是程序的输出内容：\par
+固定测试样例:(1+2)*(1+2*(2+2)) 输出结果为 ：27\par
+1.2*1.2 输出结果为 ：1.44\par
+(1) 输出结果为 ：1\par
+(2+2 输出结果为 ：ILLEGAL\par
++2 输出结果为 ：ILLEGAL\par
+-2 输出结果为 ：-2\par
+2-2- 输出结果为 ：ILLEGAL\par
+1/0 输出结果为 ：ILLEGAL\par
+1++1.2 输出结果为 ：ILLEGAL\par
+1+-1.2 输出结果为 ：-0.2\par
+2e2-2 输出结果为 ：198\par
+2e-1+1 输出结果为 ：1.2\par
+2e-2*2 输出结果为 ：0.04\par
+请自主测试；输入表达式 (输入 'exit' 退出): exit\par
+退出程序.
+\section{Bug 报告}
+在主函数和测试过程中暂未发现明显问题。
+\end{document}
