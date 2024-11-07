@@ -15,6 +15,8 @@ int getPrecedence(char op)
         return 1;
     if (op == '*' || op == '/')
         return 2;
+    if (op == '#')
+        return -1;
     return 0;
 }
 
@@ -34,6 +36,7 @@ double applyOp(double a, double b, char op)
     }
     return 0;
 }
+
 bool infixToPostfix(const string &expr, string &postfix)
 {
     stack<char> ops;
@@ -61,20 +64,27 @@ bool infixToPostfix(const string &expr, string &postfix)
             postfix += c;
             lastoperator = false;
             laste = true;
-            if (i + 1 < expr.size() && expr[i + 1] == '-')
+            if (i + 1 < expr.size() && expr[i + 1] == '(')
+            {
+                laste = false;
+                postfix += ' ';
+            }
+            else if (i + 1 < expr.size() && expr[i + 1] == '-')
             {
                 postfix += expr[++i];
             }
         }
         else if (c == '(')
         {
+            if (expr[i + 1] == ')')
+                return false;
             ops.push(c);
             lastoperator = true;
             laste = false;
         }
         else if (c == ')')
         {
-            while (!ops.empty() && ops.top() != '(')
+            while (!ops.empty() && ops.top() != '(' && ops.top() != '#')
             {
                 postfix += ' ';
                 postfix += ops.top();
@@ -82,19 +92,34 @@ bool infixToPostfix(const string &expr, string &postfix)
             }
             if (ops.empty())
                 return false;
-            ops.pop();
-            lastoperator = false;
-            laste = false;
+            else
+            {
+                if (ops.top() == '#')
+                {
+                    ops.pop();
+                    --i;
+                }
+                ops.pop();
+                lastoperator = false;
+                laste = false;
+            }
         }
         else if (c == '+' || c == '-' || c == '*' || c == '/')
         {
-            if ((lastoperator) && (c == '-'))
+            if ((lastoperator) && (c == '-') && !sign && (i + 1) < expr.size() && expr[i + 1] != '(')
             {
-                sign = true;
                 laste = false;
+                sign = true;
             }
+
             else
             {
+                if ((lastoperator) && (c == '-') && !sign && (i + 1) < expr.size() && expr[i + 1] == '(')
+                {
+                    ops.push('(');
+                    postfix += '0';
+                    sign = false;
+                }
                 postfix += ' ';
                 while (!ops.empty() && getPrecedence(ops.top()) >= getPrecedence(c))
                 {
@@ -103,29 +128,36 @@ bool infixToPostfix(const string &expr, string &postfix)
                     ops.pop();
                 }
                 ops.push(c);
+                if ((lastoperator) && (c == '-') && !sign && (i + 1) < expr.size() && expr[i + 1] == '(')
+                {
+                    ops.push('(');
+                    ops.push('#');
+                    ++i;
+                }
                 lastoperator = true;
                 laste = false;
             }
         }
-        else if (!isspace(c))
+
+        else if (!isspace(c) && c != '#')
         {
-            // 非法字符
             return false;
         }
     }
-
     // 处理剩余的操作符
     while (!ops.empty())
     {
         if (ops.top() == '(')
-            return false; // 括号不匹配
+        {
+            return false;
+        }
         postfix += ' ';
         postfix += ops.top();
         ops.pop();
     }
     return true;
 }
-bool evaluatePostfix(const string &postfix, double &result)
+bool evaluatePostfix(string &postfix, double &result)
 {
     stack<double> values;
     istringstream tokens(postfix);
@@ -147,7 +179,9 @@ bool evaluatePostfix(const string &postfix, double &result)
             values.pop();
             double res = applyOp(a, b, token[0]);
             if (isnan(res))
+            {
                 return false;
+            }
             values.push(res);
         }
         else
@@ -157,7 +191,9 @@ bool evaluatePostfix(const string &postfix, double &result)
     }
 
     if (values.size() != 1)
+    {
         return false;
+    }
     result = values.top();
     return true;
 }
