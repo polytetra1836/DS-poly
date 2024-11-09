@@ -46,7 +46,9 @@
 按照要求，我将\textbf{\texttt{BST}}改为AVLT，在结构体中加入了子树高度，将\textbf{\texttt{private}}
 的成员函数都改为\textbf{\texttt{protected}}。\par
 我写入了\textbf{\texttt{BST}}balance功能，分别对于4种由子树高度变化1而导致子树不平衡的情况，分别用1次或
-2次，左旋转和右旋转实现重新平衡的功能，每种旋转以及复合操作各写为了1个函数。
+2次，左旋转和右旋转实现重新平衡的功能，每种旋转以及复合操作各写为了1个函数。\par
+针对balance函数，我写了重载的\textbf{\texttt{isbalanced}}函数，对外开放的是接口，而
+\textbf{\texttt{protected}}的用于检测树是否平衡，自上向下进行检测。\par
 在\textbf{\texttt{remove}}和\textbf{\texttt{insert}}函数中，我在原有的函数末尾
 调用\textbf{\texttt{balance}}函数，保证子树高度和平衡性能够随时更新，这种操作会引发栈的深度调用，不过在
 严格的平衡要求下是安全的。\par
