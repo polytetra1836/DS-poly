@@ -21,5 +21,6 @@ run: $(TARGET)
 	time ./$(TARGET)
 clean:
 	rm -f $(TARGET)
+	rm -f *.aux *.log *.out *.pdf *.toc *.bbl *.blg *.blx.bib *.run.xml *.synctex.gz *.bib
 report:
 	xelatex report.tex

@@ -1,0 +1,63 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{geometry}
+\geometry{margin=1.5cm, vmargin={0pt,1cm}}
+\setlength{\topmargin}{-1cm}
+\setlength{\paperheight}{29.7cm}
+\setlength{\textheight}{25.3cm}
+
+% useful packages.
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{layout}
+\usepackage{listings}
+\usepackage{float, caption}
+
+\lstset{
+    basicstyle=\ttfamily, basewidth=0.5em
+}
+
+% some common command
+\newcommand{\dif}{\mathrm{d}}
+\newcommand{\avg}[1]{\left\langle #1 \right\rangle}
+\newcommand{\difFrac}[2]{\frac{\dif #1}{\dif #2}}
+\newcommand{\pdfFrac}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\OFL}{\mathrm{OFL}}
+\newcommand{\UFL}{\mathrm{UFL}}
+\newcommand{\fl}{\mathrm{fl}}
+\newcommand{\op}{\odot}
+\newcommand{\Eabs}{E_{\mathrm{abs}}}
+\newcommand{\Erel}{E_{\mathrm{rel}}}
+
+\begin{document}
+
+\pagestyle{fancy}
+\fancyhead{}
+\lhead{陈翔, 3230103619}
+\chead{数据结构与算法第六题作业}
+\rhead{Nov.9th, 2024}
+
+\section{AVLT的转化和remove的实现}
+按照要求，我将\textbf{\texttt{BST}}改为AVLT，在结构体中加入了子树高度，将\textbf{\texttt{private}}
+的成员函数都改为\textbf{\texttt{protected}}。\par
+我写入了\textbf{\texttt{BST}}balance功能，分别对于4种由子树高度变化1而导致子树不平衡的情况，分别用1次或
+2次，左旋转和右旋转实现重新平衡的功能，每种旋转以及复合操作各写为了1个函数。
+在\textbf{\texttt{remove}}和\textbf{\texttt{insert}}函数中，我在原有的函数末尾
+调用\textbf{\texttt{balance}}函数，保证子树高度和平衡性能够随时更新，这种操作会引发栈的深度调用，不过在
+严格的平衡要求下是安全的。\par
+\section{测试的结果}
+在运行\textbf{\texttt{test}}程序时，程序发生了类错误，在降低测试量后就不会发生这种情况。
+经过检查，我消除了栈空间限制，使用了编译优化，随后程序正常运行，没有发生复制，运行时间未超时。\par
+以下是程序最后输出结果:\par
+Empty tree\par
+------------------------------\par
+Empty tree\par
+2.26user 0.04system 0:02.30elapsed 99\%CPU (0avgtext+0avgdata 27008maxresident)k \par
+0inputs+0outputs (0major+5994minor)pagefaults 0swaps\par
+其中CPU占用率和运行时间与我的虚拟机操作环境相关，在其他设备运行时，运行时间在1s左右，CPU正常。
+\end{document}

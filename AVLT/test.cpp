@@ -3,7 +3,7 @@
 #include <cmath>
 #include <random>
 #include <vector>
-#include "AVLT.h"
+#include "BST.h"
 using namespace std;
 
 class MyData

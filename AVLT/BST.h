@@ -28,6 +28,7 @@ public:
     BinarySearchTree(BinarySearchTree &&rhs) noexcept : root{rhs.root} { rhs.root = nullptr; }
     ~BinarySearchTree() { makeEmpty(); }
 
+public:
     const Comparable &findMin() const
     {
         if (isEmpty())
@@ -72,6 +73,11 @@ public:
     {
         remove(x, root);
     }
+    bool isBalanced() const
+    {
+        return isBalanced(root);
+    }
+
     BinarySearchTree &operator=(const BinarySearchTree &rhs)
     {
         if (this != &rhs)
@@ -204,7 +210,6 @@ protected:
         }
         t->height = std::max(height(t->left), height(t->right)) + 1;
     }
-
     void rotateWithLeftChild(BinaryNode *&k2)
     {
         BinaryNode *k1 = k2->left;
@@ -287,6 +292,16 @@ protected:
         }
     }
 
+    bool isBalanced(BinaryNode *t) const
+    {
+        if (t == nullptr)
+            return true;
+        int leftHeight = height(t->left);
+        int rightHeight = height(t->right);
+        return std::abs(leftHeight - rightHeight) <= 1 &&
+               isBalanced(t->left) &&
+               isBalanced(t->right);
+    }
     BinaryNode *clone(BinaryNode *t) const
     {
         if (t == nullptr)
