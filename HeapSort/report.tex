@@ -1,0 +1,118 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{geometry}
+\geometry{margin=1.5cm, vmargin={0pt,1cm}}
+\setlength{\topmargin}{-1cm}
+\setlength{\paperheight}{29.7cm}
+\setlength{\textheight}{25.3cm}
+
+% useful packages.
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+\usepackage{layout}
+\usepackage{listings}
+\usepackage{float, caption}
+
+\lstset{
+    basicstyle=\ttfamily, basewidth=0.5em
+}
+
+% some common command
+\newcommand{\dif}{\mathrm{d}}
+\newcommand{\avg}[1]{\left\langle #1 \right\rangle}
+\newcommand{\difFrac}[2]{\frac{\dif #1}{\dif #2}}
+\newcommand{\pdfFrac}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\OFL}{\mathrm{OFL}}
+\newcommand{\UFL}{\mathrm{UFL}}
+\newcommand{\fl}{\mathrm{fl}}
+\newcommand{\op}{\odot}
+\newcommand{\Eabs}{E_{\mathrm{abs}}}
+\newcommand{\Erel}{E_{\mathrm{rel}}}
+
+\begin{document}
+
+\pagestyle{fancy}
+\fancyhead{}
+\lhead{陈翔, 3230103619}
+\chead{数据结构与算法第7次作业}
+\rhead{Nov.28th, 2024}
+
+\section{HeapSort的排序实现}
+我采用二叉堆的排序算法，其实现的主要思路、功能和函数等有：
+\subsection{堆操作}
+左式堆的基本操作包括：
+\begin{itemize}
+    \item \textbf{deleteMin}: 移除并返回堆中的最小元素。对该最小堆而言就是删除根节点，将子节点合并
+    \item \textbf{buildHeap}: 从一个无序的向量列表构建堆，通过循环和插入元素实现
+    \item \textbf{insert}: 向堆中插入元素,通过合并构建单节点堆和合并实现
+\end{itemize}
+左式堆的核心操作是\texttt{merge}函数，它通过维持左堆结构来合并两个堆，合并在右侧进行，
+降低了合并的操作复杂度。实现步骤有：
+\begin{itemize}
+    \item \textbf{1}: 合并操作有空节点，则返回平凡的结果
+    \item \textbf{2}: 找出根节点更小的堆，如果是h2则和h1交换，用它作为主元，将h2和h1的右子树合并,进入递归
+    \item \textbf{3}: 维护h1的左堆结构，如果变成了右堆则交换左右子节点
+    \item \textbf{4}:更新h1的npl，返回h1
+\end{itemize}
+\subsection{Sort排序操作}
+读入一个向量，用buildHeap将其构建为堆，然后通过循环和deleteMin操作不断输出最小元到向量中，
+该向量就是排序后的元素序列
+\section{测试函数的实现}
+\subsection{check函数}
+从向量中依次读入元素，该向量是顺序排列的，当且仅当每一个元素不超过后一元素，通过循环和反复判断，输出判断结果
+\subsection{测试向量}
+依次生成5种测试向量，它们的类型都是\textbf{int},长度都是\textbf{size}=1000000：
+\begin{itemize}
+    \item \textbf{ randomVec}: 随机不重复序列，用STL的\textbf{set}功能保证不重复性，取值从1到size
+    \item \textbf{sortVec}: 顺序序列，从0递增到size-1
+    \item \textbf{reverseVec}: 逆序序列，从size-1递减至0
+    \item \textbf{ duplicateVec}:随机有重复序列,取值从1到size
+    \item \textbf{ repeatVec}:全同序列，取值都是size
+\end{itemize}
+\subsection{测试函数}
+对上述5种序列，依次读入，用Sort函数排序，生成排序后的向量，记录排序时间，
+用check函数判定排序正确性，输出排序时间和判定结果，
+然后用std::sort\_heap排序，记录排序时间并输出。
+\subsection{测试环境}
+测试结果给出的是\textbf{std=c++20 -Wall -O2}编译指令下的运行时间，同时还进行了非优化环境
+的时间测试。经比对，编译优化对std::sort\_heap的排序时间优化更明显，对排序时间较低的优化效果更明显
+\section{测试的结果}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|}
+        \hline
+        type & HeapSort time (seconds) & std::sort\_heap time (seconds) \\
+        \hline
+        随机不重复序列 &  0.912465 & 0.0969539 \\
+        \hline
+        顺序序列 &  0.911185 & 0.100685 \\
+        \hline
+        逆序序列  & 0.0747315 & 0.11675 \\
+        \hline
+        随机重复序列 & 1.336 & 0.227278 \\
+        \hline
+        全同序列 & 0.0678918 & 0.0703563 \\
+        \hline
+    \end{tabular}
+    \caption{排序时间结果比较：关于 HeapSort 和 std::sort\_heap}
+    \label{tab:performance}
+\end{table}
+\section{测试结果分析}
+理论上说，二者的时间复杂度都是\textbf{O(NlogN)},因为单步操作的最坏情况是\textbf{O(logN)}，而这样的步数
+可能有\(\theta\)(N)步,这取决于堆的高度。\par
+经过运行时间点测试，发现std::sort\_heap的堆建立时间明显低于HeapSort，这是由二者结构决定的，
+尽管该排序算法中，堆建立时间往往小于删除排序时(逆序序列中二者接近相等)
+不过我们可以从中验证的结构，结合实现功能，我们知道后者的实现是完全二叉堆，前者是偏重的左堆，
+在非逆序的情况下，建堆时间前者高于后者\par
+由于std::sort\_heap使用的完全二叉堆结构，在其排序过程中，顺序、逆序和随机不重复序列的运行时间是相近
+的。对于输入序列的序关系是相对稳定的。\par
+而对于自行设计的HeapSort而言，我们存在以下问题：一方面，维持左堆结构需要交换、判定和更新npl等操作，
+这会使得，在通常情况下，效率降低了常数倍C，如同我们看的测试结果一样；与此同时，当数据是明显离散无序的时候，
+保持的左堆结构在大概率下会近似于完全堆，其高度与完全堆相差不大，不妨记为k，而维护操作明显降低了其效率，
+算法时间复杂度近似为\textbf{CN(logN-k)}，相较于\textbf{N(logN)}差了C倍，其中k和c都是大于1的小正常数。\par
+\end{document}
