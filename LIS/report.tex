@@ -1,0 +1,187 @@
+\documentclass{article}
+\usepackage{amsmath, amssymb, amsthm, geometry, algorithmicx, algpseudocode}
+\usepackage{algorithm}
+\usepackage{amsfonts} % 用于数学字体
+\usepackage{amssymb} % 用于数学符号
+\usepackage{ctex}% 用于中文格式
+
+\begin{document}
+
+\title{最长严格递增子序列动态规划算法}
+\author{}
+\date{}
+\maketitle
+
+\section{问题描述}
+给定两个序列 $A = [a_1, a_2, \dots, a_m]$ 和 $B = [b_1, b_2, \dots, b_n]$，找出它们的最长严格递增子序列（LIS）。
+
+\section{动态规划算法}
+\subsection{状态定义}
+设 $dp[i][j]$ 表示序列 $A[1..i]$ 和 $B[1..j]$ 中的最长严格递增子序列的长度。
+
+\subsection{状态转移方程}
+\begin{itemize}
+    \item 如果 $A[i] = B[j]$，则最优解至少包含它们中的一个，若同时包含，则删去改2个元素后得到了
+    输入为(i-1)(j-1)以及输入元素是该问题子集的最优解，因此有递推关系 ；
+    若不是同时包含，不妨设最优解中B不含第j个元素，则该元素在j之前已经有出现，否则与子序列相同矛盾，
+    则将B中B[j]最后一次出现的该元素与B[j]替换，则仍是最优解，因此仍满足递推关系
+    \[ 
+        dp[i][j] = dp[i-1][j-1] + 1 
+        \]
+    \item 如果 $A[i] \neq B[j]$，最优解不同时包含这2个元素，则删去不含的一个，子序列长度不变，仍是缩小规模
+   输入的最优解，因此有递推关系
+    \[
+    dp[i][j] = \max(dp[i-1][j], dp[i][j-1]) 
+    \]
+\end{itemize}
+
+\subsection{初始条件}
+\[ 
+dp[i][0] = 0 \quad (\forall i) 
+\]
+\[ 
+dp[0][j] = 0 \quad (\forall j) 
+\]
+\begin{algorithm}
+    \caption{填表过程}
+\begin{algorithmic}[1]
+    \State \textbf{输入}：序列 $A$ 和 $B$，它们的长度分别为 $m$ 和 $n$，序列内读入每个元素
+    \State \textbf{初始化}：二维数组 $dp$，大小为 $(m+1) \times (n+1)$，全部元素初始化为 0
+    \For{$i = 1$ to $m$}
+        \For{$j = 1$ to $n$}
+            \If{$A[i] = B[j]$}
+                \State $dp[i][j] = dp[i-1][j-1] + 1$
+            \Else
+                \State $dp[i][j] = \max(dp[i-1][j], dp[i][j-1])$
+            \EndIf
+        \EndFor
+    \EndFor
+    \State \textbf{输出}：$dp[m][n]$，最长严格递增子序列的长度
+    \end{algorithmic}
+    \end{algorithm}
+最长严格递增子序列的长度为 $dp[m][n]$。
+
+\section{算法复杂度}
+该算法的时间复杂度为：
+\[
+O(m \cdot n)
+\]
+
+\section{示例}
+令 $A = [a, b, c, b, d, a]$ 和 $B = [b, c, a, b, d]$。
+
+\subsection{初始化}
+\[
+dp =
+\begin{bmatrix}
+0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 0 & 0 & 0 \\
+\end{bmatrix}
+\]
+
+\subsection{填表过程}
+\subsection*{动态规划表更新过程}
+
+\subsubsection*{初始化状态}
+\[
+\begin{array}{|c|c|c|c|c|c|c|}
+\hline
+    & j=0 & j=1 & j=2 & j=3 & j=4 & j=5 \\ \hline
+i=0 & 0   & 0   & 0   & 0   & 0   & 0   \\ \hline
+i=1 & 0   & 0   & 0   & 0   & 0   & 0   \\ \hline
+i=2 & 0   & 0   & 0   & 0   & 0   & 0   \\ \hline
+i=3 & 0   & 0   & 0   & 0   & 0   & 0   \\ \hline
+i=4 & 0   & 0   & 0   & 0   & 0   & 0   \\ \hline
+i=5 & 0   & 0   & 0   & 0   & 0   & 0   \\ \hline
+i=6 & 0   & 0   & 0   & 0   & 0   & 0   \\ \hline
+\end{array}
+\]
+
+
+\subsubsection*{更新第1列,当i=2,j=1发生增长，对应与第一个b匹配）}
+\[
+\begin{array}{|c|c|c|c|c|c|c|}
+\hline
+    & j=0 & j=1 & j=2 & j=3 & j=4 & j=5 \\ \hline
+i=0 & 0   & 0   & 0   & 0   & 0   & 0   \\ \hline
+i=1 & 0   & 0   & 0   & 0   & 0   & 0   \\ \hline
+i=2 & 0   & 1   & 0   & 0   & 0   & 0   \\ \hline
+i=3 & 0   & 1   & 0   & 0   & 0   & 0   \\ \hline
+i=4 & 0   & 1   & 0   & 0   & 0   & 0   \\ \hline
+i=5 & 0   & 1   & 0   & 0   & 0   & 0   \\ \hline
+i=6 & 0   & 1   & 0   & 0   & 0   & 0   \\ \hline
+\end{array}
+\]
+
+\subsubsection*{更新第2列,i=3,j=2发生增长，对应于c发生匹配}
+\[
+\begin{array}{|c|c|c|c|c|c|c|}
+\hline
+    & j=0 & j=1 & j=2 & j=3 & j=4 & j=5 \\ \hline
+i=0 & 0   & 0   & 0   & 0   & 0   & 0   \\ \hline
+i=1 & 0   & 0   & 0   & 0   & 0   & 0   \\ \hline
+i=2 & 0   & 1   & 1   & 0   & 0   & 0   \\ \hline
+i=3 & 0   & 1   & 2   & 0   & 0   & 0   \\ \hline
+i=4 & 0   & 1   & 2   & 0   & 0   & 0   \\ \hline
+i=5 & 0   & 1   & 2   & 0   & 0   & 0   \\ \hline
+i=6 & 0   & 1   & 2   & 0   & 0   & 0   \\ \hline
+\end{array}
+\]
+
+\subsubsection*{更新第3列，i=1,j=3;i=1,j=6发生增长，对应于a的匹配}
+\[
+\begin{array}{|c|c|c|c|c|c|c|}
+\hline
+    & j=0 & j=1 & j=2 & j=3 & j=4 & j=5 \\ \hline
+i=0 & 0   & 0   & 0   & 0   & 0   & 0   \\ \hline
+i=1 & 0   & 0   & 0   & 1   & 0   & 0   \\ \hline
+i=2 & 0   & 1   & 1   & 1   & 0   & 0   \\ \hline
+i=3 & 0   & 1   & 2   & 2   & 0   & 0   \\ \hline
+i=4 & 0   & 1   & 2   & 2   & 0   & 0   \\ \hline
+i=5 & 0   & 1   & 2   & 2   & 0  & 0   \\ \hline
+i=6 & 0   & 1   & 2   & 3   & 0   & 0   \\ \hline
+\end{array}
+\]
+\subsubsection*{更新第3列，i=2,j=4;i=1,j=6发生增长，分别对应A的第一个、第二个b和B中的元素b的匹配}
+\[
+\begin{array}{|c|c|c|c|c|c|c|}
+\hline
+    & j=0 & j=1 & j=2 & j=3 & j=4 & j=5 \\ \hline
+i=0 & 0   & 0   & 0   & 0   & 0   & 0   \\ \hline
+i=1 & 0   & 0   & 0   & 1   & 1   & 0   \\ \hline
+i=2 & 0   & 1   & 1   & 1   & 2   & 0   \\ \hline
+i=3 & 0   & 1   & 2   & 2   & 3   & 0   \\ \hline
+i=4 & 0   & 1   & 2   & 2   & 3  & 0   \\ \hline
+i=5 & 0   & 1   & 2   & 2   & 3  & 0   \\ \hline
+i=6 & 0   & 1   & 2   & 3   & 3   & 0   \\ \hline
+\end{array}
+\]
+\subsubsection*{更新第5列，i=4,j=5,对应于D的匹配}
+\[
+\begin{array}{|c|c|c|c|c|c|c|}
+\hline
+    & j=0 & j=1 & j=2 & j=3 & j=4 & j=5 \\ \hline
+i=0 & 0   & 0   & 0   & 0   & 0   & 0   \\ \hline
+i=1 & 0   & 0   & 0   & 1   & 1   & 1   \\ \hline
+i=2 & 0   & 1   & 1   & 1   & 2   & 2   \\ \hline
+i=3 & 0   & 1   & 2   & 2   & 3   & 3   \\ \hline
+i=4 & 0   & 1   & 2   & 2   & 3   & 4   \\ \hline
+i=5 & 0   & 1   & 2   & 2   & 3   & 4   \\ \hline
+i=6 & 0   & 1   & 2   & 3   & 3   & 4  \\ \hline
+\end{array}
+\]
+
+\subsection*{最终结果}
+
+
+\subsection{最终结果}
+最长严格递增子序列长度为：
+\[
+dp[6][5] =4
+\]
+
+\end{document}
